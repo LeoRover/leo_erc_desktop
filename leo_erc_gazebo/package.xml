@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>leo_erc_gazebo</name>
+  <version>0.0.0</version>
+  <description>
+    Launch files and other resources for simulating Leo Rover (ERC edition) in Gazebo.
+  </description>
+
+  <maintainer email="support@fictionlab.pl">Fictionlab</maintainer>
+  <author email="blazej@fictionlab.pl">Błażej Sowa</author>
+
+  <license>MIT</license>
+
+  <url type="bugtracker">https://github.com/LeoRover/leo_erc_simulator/issues</url>
+  <url type="repository">https://github.com/LeoRover/leo_erc_simulator</url>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>gazebo_dev</depend>
+  <depend>gazebo_ros</depend>
+  <depend>roscpp</depend>
+
+  <exec_depend>gazebo_ros_control</exec_depend>
+  <exec_depend>gazebo_plugins</exec_depend>
+  <exec_depend>joint_state_controller</exec_depend>
+  <exec_depend>diff_drive_controller</exec_depend>
+  <exec_depend>topic_tools</exec_depend>
+  <exec_depend>compressed_image_transport</exec_depend>
+
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>nav_msgs</exec_depend>
+
+  <exec_depend>leo_erc_description</exec_depend>
+ 
+</package>
