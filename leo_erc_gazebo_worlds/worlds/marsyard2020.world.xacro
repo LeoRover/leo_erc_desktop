@@ -40,7 +40,7 @@
 
     <!-- Marsyard -->
     <include>
-      <uri>model://marsyard_terrain</uri>
+      <uri>model://marsyard2020_terrain</uri>
     </include>
 
     <xacro:include filename="$(find leo_erc_gazebo_worlds)/sdf/landmark.sdf.xacro"/>
