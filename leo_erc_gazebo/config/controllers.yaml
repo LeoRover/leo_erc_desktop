@@ -1,4 +1,4 @@
-controllers:
+gazebo/controllers:
 
   state:
     type: joint_state_controller/JointStateController

@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+
+import rospy
+from geometry_msgs.msg import TwistStamped, PoseStamped
+from nav_msgs.msg import Odometry
+
+
+def wheel_odom_callback(msg):
+    odom_msg = TwistStamped()
+    odom_msg.header.stamp = msg.header.stamp
+    odom_msg.header.frame_id = msg.child_frame_id
+    odom_msg.twist = msg.twist.twist
+
+    pose_msg = PoseStamped()
+    pose_msg.header.stamp = msg.header.stamp
+    pose_msg.header.frame_id = msg.header.frame_id
+    pose_msg.pose = msg.pose.pose
+
+    wheel_odom_pub.publish(odom_msg)
+    wheel_pose_pub.publish(pose_msg)
+
+
+rospy.init_node("odom_compat_node")
+
+sub = rospy.Subscriber("gazebo/controllers/diff_drive/odom",
+                       Odometry, wheel_odom_callback, tcp_nodelay=True)
+wheel_odom_pub = rospy.Publisher("wheel_odom", TwistStamped, queue_size=1)
+wheel_pose_pub = rospy.Publisher("wheel_pose", PoseStamped, queue_size=1)
+
+rospy.spin()

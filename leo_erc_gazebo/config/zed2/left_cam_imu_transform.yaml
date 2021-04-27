@@ -1,0 +1,10 @@
+# A message from /zed2/left_cam_imu_transform topic 
+translation:
+    x: -0.00200000009499
+    y: -0.02300000377
+    z: -0.00200000009499
+rotation:
+    x: 0.000701240554918
+    y: 0.0
+    z: -0.000845727918204
+    w: 0.999999403954
