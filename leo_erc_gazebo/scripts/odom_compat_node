@@ -1,30 +1,69 @@
 #!/usr/bin/env python
 
 import rospy
-from geometry_msgs.msg import TwistStamped, PoseStamped
+import PyKDL
+
+from geometry_msgs.msg import TwistStamped, PoseStamped, Pose
 from nav_msgs.msg import Odometry
+from std_srvs.srv import Trigger, TriggerResponse
+
+
+def pose_to_frame(pose):
+    return PyKDL.Frame(PyKDL.Rotation.Quaternion(pose.orientation.x, pose.orientation.y,
+                                                 pose.orientation.z, pose.orientation.w),
+                       PyKDL.Vector(pose.position.x, pose.position.y, pose.position.z))
+
+
+def frame_to_pose(frame):
+    pose = Pose()
+    pose.position.x = frame.p.x()
+    pose.position.y = frame.p.y()
+    pose.position.z = frame.p.z()
+    (pose.orientation.x, pose.orientation.y, pose.orientation.z,
+     pose.orientation.w) = frame.M.GetQuaternion()
+    return pose
+
+
+def update_offset():
+    global offset
+    offset = pose_to_frame(last_pose).Inverse()
 
 
 def wheel_odom_callback(msg):
+    global last_pose
     odom_msg = TwistStamped()
     odom_msg.header.stamp = msg.header.stamp
     odom_msg.header.frame_id = msg.child_frame_id
     odom_msg.twist = msg.twist.twist
 
+    last_pose = msg.pose.pose
     pose_msg = PoseStamped()
     pose_msg.header.stamp = msg.header.stamp
     pose_msg.header.frame_id = msg.header.frame_id
-    pose_msg.pose = msg.pose.pose
+
+    frame = offset * pose_to_frame(msg.pose.pose)
+    pose_msg.pose = frame_to_pose(frame)
 
     wheel_odom_pub.publish(odom_msg)
     wheel_pose_pub.publish(pose_msg)
 
 
+def wheel_odom_reset(req):
+    update_offset()
+    return TriggerResponse(True, "")
+
+
 rospy.init_node("odom_compat_node")
 
-sub = rospy.Subscriber("gazebo/controllers/diff_drive/odom",
-                       Odometry, wheel_odom_callback, tcp_nodelay=True)
+last_pose = Pose()
+last_pose.orientation.w = 1.0
+offset = PyKDL.Frame()
+
 wheel_odom_pub = rospy.Publisher("wheel_odom", TwistStamped, queue_size=1)
 wheel_pose_pub = rospy.Publisher("wheel_pose", PoseStamped, queue_size=1)
+wheel_odom_sub = rospy.Subscriber("gazebo/controllers/diff_drive/odom",
+                                  Odometry, wheel_odom_callback, tcp_nodelay=True)
+wheel_odom_reset_srv = rospy.Service(
+    "core2/reset_odometry", Trigger, wheel_odom_reset)
 
 rospy.spin()
