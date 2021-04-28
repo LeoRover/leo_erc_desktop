@@ -14,7 +14,7 @@ install(
 
 catkin_install_python(
   PROGRAMS
-    scripts/odom_relay
+    scripts/odom_compat_node
     scripts/zed2_imu_transform_broadcaster
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
