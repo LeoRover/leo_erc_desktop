@@ -6,7 +6,8 @@ import PyKDL
 from geometry_msgs.msg import TwistStamped, PoseStamped, Pose, TwistWithCovariance
 from nav_msgs.msg import Odometry
 from std_srvs.srv import Trigger, TriggerResponse
-from nav_msgs.msg import Odometry
+from std_msgs.msg import Empty as EmptyMsg
+from std_srvs.srv import Empty as EmptySrv
 
 
 def pose_to_frame(pose):
@@ -59,6 +60,10 @@ def zed2_odom_callback(msg):
     zed2_odom_pub.publish(msg)
 
 
+def zed2_reset_odom_callback(msg):
+    zed2_reset_odom()
+
+
 rospy.init_node("odom_compat_node")
 
 last_pose = Pose()
@@ -75,5 +80,8 @@ wheel_odom_reset_srv = rospy.Service(
 zed2_odom_pub = rospy.Publisher("zed2/odom", Odometry, queue_size=1)
 zed2_odom_sub = rospy.Subscriber(
     "gazebo/zed2/odom", Odometry, zed2_odom_callback, tcp_nodelay=True)
+zed2_reset_odom = rospy.ServiceProxy("gazebo/zed2/reset_odom", EmptySrv)
+zed2_reset_odom_sub = rospy.Subscriber(
+    "zed2/reset_odometry", EmptyMsg, zed2_reset_odom_callback)
 
 rospy.spin()
