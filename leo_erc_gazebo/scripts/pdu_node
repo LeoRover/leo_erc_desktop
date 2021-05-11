@@ -32,15 +32,17 @@ def pdu_callback(msg):
         model_name ='leo', 
         relative_entity_name ='world')
 
-    # transform world->leo+pdu_translation diferent cordinates
-
     spawn_probe_client(
         model_name=probe_name,
         model_xml=model,
         robot_namespace='',
-        initial_pose=Pose(pose_msg.pose.position, pose_msg.pose.orientation),
+        initial_pose=Pose(pdu_translation, Quaternion(0,0,0,0)),
         reference_frame='leo'
     )
+    print (pose_msg.pose.orientation.x)
+    print (pose_msg.pose.orientation.y)
+    print (pose_msg.pose.orientation.z)
+    print (pose_msg.pose.orientation.w)
     pdu_dropped_pub.publish(probe_cnt)
 
 rospy.init_node("pdu_node")
