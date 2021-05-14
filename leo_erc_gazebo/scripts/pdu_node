@@ -27,22 +27,16 @@ def pdu_callback(msg):
 
     probe_cnt += 1
     probe_name = model_name+str(probe_cnt)
-    
-    pose_msg = rover_state_client(
-        model_name ='leo', 
-        relative_entity_name ='world')
 
-    spawn_probe_client(
+    log = spawn_probe_client(
         model_name=probe_name,
         model_xml=model,
         robot_namespace='',
-        initial_pose=Pose(pdu_translation, Quaternion(0,0,0,0)),
-        reference_frame='leo'
+        initial_pose=Pose(pdu_translation, Quaternion(0,0,0,1)),
+        reference_frame='leo::base_footprint'
     )
-    print (pose_msg.pose.orientation.x)
-    print (pose_msg.pose.orientation.y)
-    print (pose_msg.pose.orientation.z)
-    print (pose_msg.pose.orientation.w)
+    print(log.status_message)
+
     pdu_dropped_pub.publish(probe_cnt)
 
 rospy.init_node("pdu_node")
@@ -50,7 +44,7 @@ rospy.init_node("pdu_node")
 probe_number = 6
 probe_cnt = 0
 model_name = "probe"
-pdu_translation = Point(-0.195,0,0.1)
+pdu_translation = Point(-0.195,0,0.12)
 
 model = rospy.get_param("/probe_description")
 
@@ -59,7 +53,6 @@ pdu_drop_sub = rospy.Subscriber("probe_deployment_unit/drop", Empty, pdu_callbac
 
 spawn_probe_client = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
 delete_probe_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
-rover_state_client = rospy.ServiceProxy('/gazebo/get_model_state', GetModelState)
 pdu_reset_srv = rospy.Service("probe_delployment_unit/home", Trigger, pdu_reset)
 
 rospy.spin()
