@@ -38,7 +38,11 @@ def pdu_callback(msg):
         initial_pose=Pose(pdu_translation, Quaternion(0, 0, 0, 1)),
         reference_frame=spawn_reference_frame
     )
-    rospy.loginfo(log.status_message)
+
+    if log.success:
+        rospy.loginfo(log.status_message)
+    else:
+        rospy.logerr(log.status_message)
 
     pdu_dropped_pub.publish(probe_cnt)
 
