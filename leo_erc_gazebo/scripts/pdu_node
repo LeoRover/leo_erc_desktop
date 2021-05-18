@@ -35,7 +35,7 @@ def pdu_callback(msg):
         model_name=probe_name,
         model_xml=probe_model,
         robot_namespace='',
-        initial_pose=Pose(pdu_translation, Quaternion(0, 0, 0, 1)),
+        initial_pose=pdu_pose,
         reference_frame=spawn_reference_frame
     )
 
@@ -57,9 +57,11 @@ probe_basename = rospy.get_param("~probe_basename", "probe")
 spawn_reference_frame = rospy.get_param(
     "~spawn_reference_frame", "leo::base_footprint")
 
-pdu_x = rospy.get_param("pdu/x")
-pdu_z = rospy.get_param("pdu/z")
-pdu_translation = Point(pdu_x, 0, pdu_z)
+pdu_translation = rospy.get_param("~probe_spawn_translation")
+pdu_translation = Point(pdu_translation['x'],
+                        pdu_translation['y'],
+                        pdu_translation['z'])
+pdu_pose = Pose(pdu_translation, Quaternion(0, 0, 0, 1))
 
 pdu_dropped_pub = rospy.Publisher(
     "probe_deployment_unit/probes_dropped",

@@ -67,6 +67,7 @@
       <param name="probe_basename" value="$(arg tf_frame_prefix)probe"/>
       <param name="spawn_reference_frame"
              value="$(arg model_name)::$(arg tf_frame_prefix)base_footprint"/>
+      <rosparam command="load" file="$(find leo_erc_gazebo)/config/pdu.yaml"/>
     </node>
 
   </group>
