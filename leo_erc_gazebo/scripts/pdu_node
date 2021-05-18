@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 import rospy
 from geometry_msgs.msg import Point, Quaternion, Pose
 from std_srvs.srv import Trigger, TriggerResponse
@@ -14,7 +15,10 @@ def pdu_reset(req):
         delete_probe_client(
             model_name=probe_name
         )
+    
     probe_cnt = 0
+    pdu_dropped_pub.publish(probe_cnt)
+
     return TriggerResponse(True, "")
 
 
@@ -53,8 +57,9 @@ model = rospy.get_param("probe_description")
 
 pdu_dropped_pub = rospy.Publisher(
     "probe_deployment_unit/probes_dropped",
-    UInt8,
-    queue_size=1)
+    UInt8, queue_size=1, latch=True)
+
+pdu_dropped_pub.publish(probe_cnt)
 
 spawn_probe_client = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
 delete_probe_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
