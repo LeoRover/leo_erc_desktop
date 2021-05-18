@@ -10,7 +10,7 @@ from gazebo_msgs.srv import SpawnModel, DeleteModel
 def pdu_reset(req):
     global probe_cnt
 
-    for i in range(1, probe_number + 1):
+    for i in range(1, probe_cnt + 1):
         probe_name = probe_basename + str(i)
         delete_probe_client(
             model_name=probe_name
