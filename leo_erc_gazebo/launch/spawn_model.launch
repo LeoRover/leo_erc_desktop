@@ -7,7 +7,7 @@
   <arg name="P" default="0.0"/>
   <arg name="Y" default="0.0"/>
 
-  <arg name="model" default="$(find leo_erc_description)/urdf/leo_erc_sim.urdf.xacro"/>
+  <arg name="robot_model" default="$(find leo_erc_description)/urdf/leo_erc_sim.urdf.xacro"/>
   <arg name="probe_model" default="$(find leo_erc_description)/urdf/probe.urdf.xacro"/>
   
   <arg name="fixed" default="false"/>
@@ -15,15 +15,13 @@
   <arg name="model_name" default="leo"/>
 
   <group ns="$(arg robot_ns)">
-
-    <param name="probe_description" command="xacro $(arg probe_model)"/>
-    <param name="pdu/x" type="double" value="-0.195"/>
-    <param name="pdu/z" type="double" value="0.12"/>
   
-    <param name="robot_description" command="xacro $(arg model) 
+    <param name="robot_description" command="xacro $(arg robot_model) 
       fixed:=$(arg fixed)
       robot_ns:=$(arg robot_ns)
     "/>
+
+    <param name="probe_description" command="xacro $(arg probe_model)"/>
     
     <rosparam command="load" file="$(find leo_erc_gazebo)/config/pid_gains.yaml"/>
 
@@ -37,10 +35,6 @@
       -model $(arg model_name) 
       -param robot_description
     "/>
-
-    <node name="pdu_node"
-          pkg="leo_erc_gazebo"
-          type="pdu_node"/>
 
   </group>
 

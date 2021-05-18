@@ -57,6 +57,13 @@
       <param name="tf_frame_prefix" value="$(arg tf_frame_prefix)"/>
     </node>
 
+    <param name="pdu/x" type="double" value="-0.195"/>
+    <param name="pdu/z" type="double" value="0.12"/>
+
+    <node name="pdu_node"
+          pkg="leo_erc_gazebo"
+          type="pdu_node"/>
+
   </group>
 
 </launch>
