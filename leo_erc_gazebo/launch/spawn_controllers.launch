@@ -1,6 +1,7 @@
 <launch>
 
   <arg name="robot_ns" default="/"/>
+  <arg name="model_name" default="leo"/>
 
   <arg name="tf_frame_prefix" 
        value="$(eval '' if robot_ns == '/' else robot_ns + '/')"/>
@@ -55,6 +56,15 @@
           pkg="leo_erc_gazebo"
           type="zed2_imu_transform_broadcaster">
       <param name="tf_frame_prefix" value="$(arg tf_frame_prefix)"/>
+    </node>
+
+    <node name="pdu_node"
+          pkg="leo_erc_gazebo"
+          type="pdu_node">
+      <param name="probe_basename" value="$(arg tf_frame_prefix)probe"/>
+      <param name="spawn_reference_frame"
+             value="$(arg model_name)::$(arg tf_frame_prefix)base_footprint"/>
+      <rosparam command="load" file="$(find leo_erc_gazebo)/config/pdu.yaml"/>
     </node>
 
   </group>
