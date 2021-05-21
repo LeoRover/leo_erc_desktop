@@ -16,5 +16,6 @@ catkin_install_python(
   PROGRAMS
     scripts/odom_compat_node
     scripts/zed2_imu_transform_broadcaster
+    scripts/pdu_node
   DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )

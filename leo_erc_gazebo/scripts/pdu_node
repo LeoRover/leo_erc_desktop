@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+
+import rospy
+from geometry_msgs.msg import Point, Quaternion, Pose
+from std_srvs.srv import Trigger, TriggerResponse
+from std_msgs.msg import Empty, UInt8
+from gazebo_msgs.srv import SpawnModel, DeleteModel
+
+
+def pdu_reset(req):
+    global probe_cnt
+
+    for i in range(1, probe_cnt + 1):
+        probe_name = probe_basename + str(i)
+        delete_probe_client(
+            model_name=probe_name
+        )
+
+    probe_cnt = 0
+    pdu_dropped_pub.publish(probe_cnt)
+
+    return TriggerResponse(True, "")
+
+
+def pdu_callback(msg):
+    global probe_cnt
+
+    if (probe_cnt >= probe_number):
+        return
+
+    probe_cnt += 1
+    probe_name = probe_basename + str(probe_cnt)
+
+    log = spawn_probe_client(
+        model_name=probe_name,
+        model_xml=probe_model,
+        robot_namespace='',
+        initial_pose=pdu_pose,
+        reference_frame=spawn_reference_frame
+    )
+
+    if log.success:
+        rospy.loginfo(log.status_message)
+    else:
+        rospy.logerr(log.status_message)
+
+    pdu_dropped_pub.publish(probe_cnt)
+
+
+rospy.init_node("pdu_node")
+
+probe_number = 5
+probe_cnt = 0
+
+probe_model = rospy.get_param("probe_description")
+probe_basename = rospy.get_param("~probe_basename", "probe")
+spawn_reference_frame = rospy.get_param(
+    "~spawn_reference_frame", "leo::base_footprint")
+
+pdu_translation = rospy.get_param("~probe_spawn_translation")
+pdu_translation = Point(pdu_translation['x'],
+                        pdu_translation['y'],
+                        pdu_translation['z'])
+pdu_pose = Pose(pdu_translation, Quaternion(0, 0, 0, 1))
+
+pdu_dropped_pub = rospy.Publisher(
+    "probe_deployment_unit/probes_dropped",
+    UInt8, queue_size=1, latch=True)
+
+pdu_dropped_pub.publish(probe_cnt)
+
+spawn_probe_client = rospy.ServiceProxy('/gazebo/spawn_urdf_model', SpawnModel)
+delete_probe_client = rospy.ServiceProxy('/gazebo/delete_model', DeleteModel)
+pdu_reset_srv = rospy.Service("probe_deployment_unit/home", Trigger, pdu_reset)
+
+pdu_drop_sub = rospy.Subscriber(
+    "probe_deployment_unit/drop",
+    Empty,
+    pdu_callback)
+
+rospy.spin()
