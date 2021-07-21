@@ -3,9 +3,10 @@ Panels:
     Help Height: 0
     Name: Displays
     Property Tree Widget:
-      Expanded: ~
+      Expanded:
+        - /Global Options1
       Splitter Ratio: 0.5
-    Tree Height: 480
+    Tree Height: 774
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -24,7 +25,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: NavCam
 Preferences:
   PromptSaveOnExit: true
 Toolbars:
@@ -60,6 +61,100 @@ Visualization Manager:
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        base_footprint:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        erc_payload_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rocker_L_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rocker_R_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_FL_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_FR_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_RL_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        wheel_RR_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        zed2_baro_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_camera_center:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        zed2_left_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_left_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_mag_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_right_camera_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_right_camera_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_temp_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_temp_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        zed2_tilt_head_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
@@ -67,16 +162,106 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: camera/image_raw
       Max Value: 1
       Median window: 5
       Min Value: 0
-      Name: Image
+      Name: HazCam
       Normalize Range: true
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
+      Value: true
+    - Class: rviz/Image
+      Enabled: true
+      Image Topic: zed2/left_raw/image_raw_color
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: NavCam
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: true
+    - Angle Tolerance: 0.10000000149011612
+      Class: rviz/Odometry
+      Covariance:
+        Orientation:
+          Alpha: 0.5
+          Color: 255; 255; 127
+          Color Style: Unique
+          Frame: Local
+          Offset: 1
+          Scale: 1
+          Value: true
+        Position:
+          Alpha: 0.30000001192092896
+          Color: 204; 51; 204
+          Scale: 1
+          Value: true
+        Value: true
+      Enabled: false
+      Keep: 100
+      Name: Ground Truth
+      Position Tolerance: 0.10000000149011612
+      Shape:
+        Alpha: 1
+        Axes Length: 1
+        Axes Radius: 0.10000000149011612
+        Color: 255; 25; 0
+        Head Length: 0.30000001192092896
+        Head Radius: 0.10000000149011612
+        Shaft Length: 1
+        Shaft Radius: 0.05000000074505806
+        Value: Arrow
+      Topic: ground_truth
+      Unreliable: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
+      Topic: zed2/point_cloud/cloud_registered
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/TF
+      Enabled: false
+      Frame Timeout: 15
+      Frames:
+        All Enabled: true
+      Marker Scale: 1
+      Name: TF
+      Show Arrows: true
+      Show Axes: true
+      Show Names: true
+      Tree:
+        {}
+      Update Interval: 0
       Value: false
   Enabled: true
   Global Options:
@@ -106,13 +291,12 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 1.4432655572891235
+      Distance: 2.893080711364746
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
-      Field of View: 0.7853981852531433
       Focal Point:
         X: 0
         Y: 0
@@ -122,19 +306,22 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3803991675376892
+      Pitch: 0.4703992009162903
       Target Frame: <Fixed Frame>
-      Yaw: 0.5054011940956116
+      Value: Orbit (rviz)
+      Yaw: 0.8404011726379395
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 707
+  HazCam:
+    collapsed: false
+  Height: 1001
   Hide Left Dock: false
   Hide Right Dock: false
-  Image:
+  NavCam:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000021bfc0200000009fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b0000021b000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb0000000a0049006d0061006700650000000143000001130000001600ffffff00000001000001100000021bfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003b0000021b000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000005560000004cfc0100000002fb0000000800540069006d00650100000000000005560000024400fffffffb0000000800540069006d00650100000000000004500000000000000000000002d00000021b00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000341fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000a3fb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b00000341000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000018400000341fc0200000005fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a00560069006500770073010000003b0000010b000000a000fffffffb0000000c00480061007a00430061006d010000014c0000013a0000001600fffffffb0000000c004e0061007600430061006d010000028c000000f00000001600fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e10000019700000003000007800000004cfc0100000002fb0000000800540069006d00650100000000000007800000024400fffffffb0000000800540069006d00650100000000000004500000000000000000000004860000034100000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -143,6 +330,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1366
+  Width: 1920
   X: 0
   Y: 0
