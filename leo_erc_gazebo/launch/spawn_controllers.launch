@@ -31,6 +31,12 @@
         <remap from="depth/image" to="/$(arg robot_ns)/zed2/depth/depth_registered"/>
       </node>
 
+      <!-- Disable verbose output from rgbd_odometry node -->
+      <node name="set_rgbd_odometry_log_level"
+            pkg="rosservice"
+            type="rosservice"
+            args="call --wait rgbd_odometry/set_logger_level 'ros.rtabmap_ros' 'warn'"/>
+
     </group>
 
     <node name="robot_state_publisher"
