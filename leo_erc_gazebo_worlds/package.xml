@@ -16,7 +16,7 @@
 
   <buildtool_depend>catkin</buildtool_depend>
 
-  <depend>gazebo_ros</depend>
+  <exec_depend>gazebo_ros</exec_depend>
 
   <build_depend>xacro</build_depend>
 
