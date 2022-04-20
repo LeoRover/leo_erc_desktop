@@ -8,7 +8,7 @@
   <arg name="Y" default="0.0"/>
 
   <arg name="robot_model" default="$(find leo_erc_description)/urdf/leo_erc_sim.urdf.xacro"/>
-  <arg name="probe_model" default="$(find leo_erc_description)/urdf/probe.urdf.xacro"/>
+  <arg name="probe_model" default="$(find leo_erc_description)/urdf/probe.urdf"/>
   
   <arg name="fixed" default="false"/>
   <arg name="robot_ns" default="/"/>
@@ -21,7 +21,7 @@
       robot_ns:=$(arg robot_ns)
     "/>
 
-    <param name="probe_description" command="xacro $(arg probe_model)"/>
+    <param name="probe_description" textfile="$(arg probe_model)"/>
     
     <rosparam command="load" file="$(find leo_erc_gazebo)/config/pid_gains.yaml"/>
 
