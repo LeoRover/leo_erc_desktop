@@ -14,7 +14,7 @@ gazebo/controllers:
     wheel_separation_multiplier: 1.91
     wheel_radius: 0.0625
 
-    pose_covariance_diagonal: [0.001, 0.001, 0.0, 0.0, 0.0, 0.03]
+    pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
     twist_covariance_diagonal: [0.0001, 0.0, 0.0, 0.0, 0.0, 0.001]
 
     base_frame_id: "base_link"

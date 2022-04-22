@@ -1,19 +1,25 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 import PyKDL
 
-from geometry_msgs.msg import TwistStamped, PoseStamped, Pose, TwistWithCovariance
+from geometry_msgs.msg import Pose, TwistWithCovariance
 from nav_msgs.msg import Odometry
-from std_srvs.srv import Trigger, TriggerResponse
+from std_srvs.srv import Trigger, TriggerRequest, TriggerResponse
 from std_msgs.msg import Empty as EmptyMsg
 from std_srvs.srv import Empty as EmptySrv
 
 
-def pose_to_frame(pose):
-    return PyKDL.Frame(PyKDL.Rotation.Quaternion(pose.orientation.x, pose.orientation.y,
-                                                 pose.orientation.z, pose.orientation.w),
-                       PyKDL.Vector(pose.position.x, pose.position.y, pose.position.z))
+def pose_to_frame(pose: Pose):
+    return PyKDL.Frame(
+        PyKDL.Rotation.Quaternion(
+            pose.orientation.x,
+            pose.orientation.y,
+            pose.orientation.z,
+            pose.orientation.w,
+        ),
+        PyKDL.Vector(pose.position.x, pose.position.y, pose.position.z),
+    )
 
 
 def frame_to_pose(frame):
@@ -21,8 +27,12 @@ def frame_to_pose(frame):
     pose.position.x = frame.p.x()
     pose.position.y = frame.p.y()
     pose.position.z = frame.p.z()
-    (pose.orientation.x, pose.orientation.y, pose.orientation.z,
-     pose.orientation.w) = frame.M.GetQuaternion()
+    (
+        pose.orientation.x,
+        pose.orientation.y,
+        pose.orientation.z,
+        pose.orientation.w,
+    ) = frame.M.GetQuaternion()
     return pose
 
 
@@ -31,36 +41,27 @@ def update_offset():
     offset = pose_to_frame(last_pose).Inverse()
 
 
-def wheel_odom_callback(msg):
+def wheel_odom_callback(msg: Odometry):
     global last_pose
-    odom_msg = TwistStamped()
-    odom_msg.header.stamp = msg.header.stamp
-    odom_msg.header.frame_id = msg.child_frame_id
-    odom_msg.twist = msg.twist.twist
-
     last_pose = msg.pose.pose
-    pose_msg = PoseStamped()
-    pose_msg.header.stamp = msg.header.stamp
-    pose_msg.header.frame_id = msg.header.frame_id
 
     frame = offset * pose_to_frame(msg.pose.pose)
-    pose_msg.pose = frame_to_pose(frame)
+    msg.pose.pose = frame_to_pose(frame)
 
-    wheel_odom_pub.publish(odom_msg)
-    wheel_pose_pub.publish(pose_msg)
+    wheel_odom_pub.publish(msg)
 
 
-def wheel_odom_reset(req):
+def wheel_odom_reset(req: TriggerRequest):
     update_offset()
     return TriggerResponse(True, "")
 
 
-def zed2_odom_callback(msg):
+def zed2_odom_callback(msg: Odometry):
     msg.twist = TwistWithCovariance()
     zed2_odom_pub.publish(msg)
 
 
-def zed2_reset_odom_callback(msg):
+def zed2_reset_odom_callback(msg: EmptyMsg):
     zed2_reset_odom()
 
 
@@ -70,18 +71,24 @@ last_pose = Pose()
 last_pose.orientation.w = 1.0
 offset = PyKDL.Frame()
 
-wheel_odom_pub = rospy.Publisher("wheel_odom", TwistStamped, queue_size=1)
-wheel_pose_pub = rospy.Publisher("wheel_pose", PoseStamped, queue_size=1)
-wheel_odom_sub = rospy.Subscriber("gazebo/controllers/diff_drive/odom",
-                                  Odometry, wheel_odom_callback, tcp_nodelay=True)
+wheel_odom_pub = rospy.Publisher("wheel_odom_with_covariance", Odometry, queue_size=1)
+wheel_odom_sub = rospy.Subscriber(
+    "gazebo/controllers/diff_drive/odom",
+    Odometry,
+    wheel_odom_callback,
+    tcp_nodelay=True,
+)
 wheel_odom_reset_srv = rospy.Service(
-    "core2/reset_odometry", Trigger, wheel_odom_reset)
+    "firmware/reset_odometry", Trigger, wheel_odom_reset
+)
 
 zed2_odom_pub = rospy.Publisher("zed2/odom", Odometry, queue_size=1)
 zed2_odom_sub = rospy.Subscriber(
-    "gazebo/zed2/odom", Odometry, zed2_odom_callback, tcp_nodelay=True)
+    "gazebo/zed2/odom", Odometry, zed2_odom_callback, tcp_nodelay=True
+)
 zed2_reset_odom = rospy.ServiceProxy("gazebo/zed2/reset_odom", EmptySrv)
 zed2_reset_odom_sub = rospy.Subscriber(
-    "zed2/reset_odometry", EmptyMsg, zed2_reset_odom_callback)
+    "zed2/reset_odometry", EmptyMsg, zed2_reset_odom_callback
+)
 
 rospy.spin()
