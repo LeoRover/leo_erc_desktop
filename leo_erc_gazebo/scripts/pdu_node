@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
 from geometry_msgs.msg import Point, Quaternion, Pose
-from std_srvs.srv import Trigger, TriggerResponse
+from std_srvs.srv import Trigger, TriggerRequest, TriggerResponse
 from std_msgs.msg import Empty, UInt8
 from gazebo_msgs.srv import SpawnModel, DeleteModel
 
 
-def pdu_reset(req):
+def pdu_reset(req: TriggerRequest):
     global probe_cnt
 
     for i in range(1, probe_cnt + 1):
@@ -22,7 +22,7 @@ def pdu_reset(req):
     return TriggerResponse(True, "")
 
 
-def pdu_callback(msg):
+def pdu_callback(msg: Empty):
     global probe_cnt
 
     if (probe_cnt >= probe_number):
