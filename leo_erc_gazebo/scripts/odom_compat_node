@@ -91,4 +91,9 @@ zed2_reset_odom_sub = rospy.Subscriber(
     "zed2/reset_odometry", EmptyMsg, zed2_reset_odom_callback
 )
 
+rospy.wait_for_service("gazebo/zed2/reset_odom")
+rospy.sleep(5.0)
+rospy.loginfo("Resetting ZED2 odometry")
+zed2_reset_odom()
+
 rospy.spin()
