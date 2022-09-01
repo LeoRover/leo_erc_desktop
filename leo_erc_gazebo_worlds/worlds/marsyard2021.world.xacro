@@ -35,7 +35,7 @@
       <uri>model://marsyard2021_terrain</uri>
     </include>
 
-    <xacro:include filename="$(find leo_erc_gazebo_worlds)/sdf/landmark.sdf.xacro"/>
+    <xacro:include filename="sdf/landmark.sdf.xacro"/>
 
     <xacro:landmark id="1">
       <pose>-2.60 -5.17 1.42 0 0 0</pose>

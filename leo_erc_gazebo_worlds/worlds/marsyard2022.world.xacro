@@ -37,7 +37,7 @@
       <uri>model://marsyard2022_terrain</uri>
     </include>
 
-    <xacro:include filename="$(find leo_erc_gazebo_worlds)/sdf/landmark.sdf.xacro" />
+    <xacro:include filename="sdf/landmark.sdf.xacro" />
 
     <xacro:macro name="landmark_with_offset" params="id x y z yaw">
       <xacro:property name="x_offset" value="-17.003807" />
