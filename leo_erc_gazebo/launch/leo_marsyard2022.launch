@@ -3,9 +3,17 @@
   <include file="$(find leo_erc_gazebo)/launch/leo_gazebo.launch"
     pass_all_args="true">
     <arg name="world_name" value="$(find leo_erc_gazebo_worlds)/worlds/marsyard2022.world" />
-    <arg name="x" value="-16.994781" />
-    <arg name="y" value="7.617489" />
+    <arg name="x" value="-17.003807" />
+    <arg name="y" value="7.617856" />
     <arg name="z" value="1.5" />
   </include>
+
+  <node name="ground_truth_filter"
+    pkg="leo_erc_gazebo"
+    type="ground_truth_filter">
+    <param name="x_offset" value="-17.003807" />
+    <param name="y_offset" value="7.617856" />
+    <param name="z_offset" value="1.352268" />
+  </node>
 
 </launch>

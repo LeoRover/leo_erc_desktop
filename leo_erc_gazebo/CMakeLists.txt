@@ -14,6 +14,7 @@ install(
 
 catkin_install_python(
   PROGRAMS
+    scripts/ground_truth_filter
     scripts/odom_compat_node
     scripts/zed2_imu_transform_broadcaster
     scripts/pdu_node

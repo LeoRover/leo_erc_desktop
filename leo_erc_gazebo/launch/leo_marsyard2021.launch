@@ -1,12 +1,21 @@
 <launch>
 
   <include file="$(find leo_erc_gazebo)/launch/leo_gazebo.launch"
-           pass_all_args="true">
+    pass_all_args="true">
     <arg name="world_name" value="$(find leo_erc_gazebo_worlds)/worlds/marsyard2021.world"/>
     <arg name="x" value="-1.11"/>
     <arg name="y" value="-14.86"/>
     <arg name="z" value="1.5"/>
     <arg name="Y" default="1.72"/>
   </include>
+
+  <node name="ground_truth_filter"
+    pkg="leo_erc_gazebo"
+    type="ground_truth_filter">
+    <param name="x_offset" value="-1.11" />
+    <param name="y_offset" value="-14.86" />
+    <param name="z_offset" value="1.17" />
+    <param name="yaw_offset" value="1.72" />
+  </node>
 
 </launch>
